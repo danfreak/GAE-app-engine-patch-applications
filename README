@@ -1,0 +1,26 @@
+----------------------------------
+GAE-appengine_patch-applications
+----------------------------------
+
+Some reusable applications that run on GAE (Google Application Engine - python version)
+using app-engine-patch (http://code.google.com/p/app-engine-patch/) for Django (http://www.djangoproject.com/)
+
+I currently tested them with app-engine-patch-sample-1.0.zip for Django 1.0.2
+
+The reusable applications include:
+
+- myblog:
+        a blog application including posts and pages (nested)
+        
+- photogallery:
+        a photogallery application
+- mycommon:
+        some utilities (img resize etc shared by several applications)
+        
+Enjoiy!
+
+
+------------------------------------
+credits:
+Daniel Vecchiato
+www.4webby.com
