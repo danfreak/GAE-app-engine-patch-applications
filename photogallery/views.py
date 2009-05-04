@@ -17,8 +17,14 @@ def show_gallery(request, key):
     return object_detail(request, Gallery.all(), key)
 
 def download_file(request, key, name):
-    file = get_object_or_404(File, key)
+    file = get_object_or_404(Photo, key)
     if file.name != name:
         raise Http404('Could not find file with this name!')
-    return HttpResponse(file.file,
+    return HttpResponse(file.thumb_s,
+        content_type=guess_type(file.name)[0] or 'application/octet-stream')
+
+def getpic2(request, key, model):
+    file = get_object_or_404(Photo, key)
+    
+    return HttpResponse(file.thumb_s,
         content_type=guess_type(file.name)[0] or 'application/octet-stream')

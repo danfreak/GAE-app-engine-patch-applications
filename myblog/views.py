@@ -42,24 +42,6 @@ def getpic2(request, key):
     
     return HttpResponse(file.thumb_s,
         content_type=guess_type(file.name)[0] or 'application/octet-stream')
-    
-"""
-from google.appengine.api import images
-
-def getpic2(request, key, w=100, h=100):
-    pic = get_object_or_404(File, key)
-    if pic == None:
-        raise Http404('Could not find file!')
-    
-    raw_img = images.Image(pic.file)
-    if w!="" and h!="":
-        raw_img.resize(width=int(w), height=int(h))
-    
-    raw_img.im_feeling_lucky()
-    thumbnail = raw_img.execute_transforms(output_encoding=images.JPEG)
-
-    return HttpResponse(thumbnail, content_type=guess_type(pic.name)[0] or 'application/octet-stream')
-"""
 
 def create_admin_user(request):
     user = User.get_by_key_name('admin')

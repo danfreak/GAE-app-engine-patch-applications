@@ -26,12 +26,14 @@ class News(db.Model):
     content = db.TextProperty("Content", required = True)
     slug = db.StringProperty("Slug")
     published = db.BooleanProperty("Pubblicato")
-    pubblicare = db.DateTimeProperty("Pubblicare il")
+    pubblicare = db.DateTimeProperty("Pubblicare il", auto_now_add = True)
     created = db.DateTimeProperty("Created", auto_now_add = True)
     updated = db.DateTimeProperty("Updated", auto_now = True)
     
     class Meta:
        verbose_name_plural = "news"
+       ordering = ('-created')
+       
     def __str__(self):
         return str(self.title)
         
@@ -49,6 +51,10 @@ class Page(db.Model):
     created = db.DateTimeProperty("Created", auto_now_add = True)
     updated = db.DateTimeProperty("Updated", auto_now = True)
     
+    
+    class Meta:
+        ordering = ('-created')
+        
     def get_url(self):
         return "/%s" % self.slug
 
@@ -78,6 +84,9 @@ class File(db.Model):
     file = db.BlobProperty(required=True)
     thumb_m = db.BlobProperty()
     thumb_s = db.BlobProperty()
+    
+    class Meta:
+      ordering = ('-created')
     
     def put(self):
       t_s = db.Blob(flickr_thumb(self.file, 100))

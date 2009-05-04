@@ -7,12 +7,17 @@ class PhotoInline(admin.TabularInline):
     
 class PhotoAdmin(admin.ModelAdmin):
     model = Photo
+    fields = ['gallery', 'name', 'file']
+    list_display = ('thumb','name')
+
 
 class GalleryAdmin(admin.ModelAdmin):
     inlines = (PhotoInline,)
     list_display = ('title', 'published', 'created')
+    list_filter = ('published',)
+    search_fields = ('title',)
     fieldsets = [
-        (None,               {'fields': ['title', 'published']}),
+        (None,               {'fields': ['title', 'published', 'image']}),
         #('Data di pubblicazione', {'fields': ['pubblicare'], 'classes': ['collapse']}),
     ]
 
