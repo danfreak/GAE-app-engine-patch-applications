@@ -1,0 +1,8 @@
+.DS_Store
+.* # Ignore all dotfiles...
+!.gitignore # except for .gitignore
+!.htaccess # except for .htaccess
+!myblog/
+!photogallery/
+!mycommon/
+*.pyc
