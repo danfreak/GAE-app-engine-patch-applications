@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Person details{% endblock %}
+
+{% block content %}
+<h1>Person details</h1>
+<a href="{% url photogallery.views.list_galleries %}">Back to listing</a>
+
+<ul>
+  <li>name: {{ object.title }}</li>
+</ul>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'nicecss_base.html' %}
+{% block title %}Person listing{% endblock %}
+
+{% block content %}
+
+<div class="blog">
+	<h2>{{page.title}}</h2>
+    <div class="blog_post">
+        {% autoescape off %}
+        	    {{page.content}}
+        {% endautoescape %}
+        
+    </div>
+    {% for g in galleries %}
+    <p>{{g.title}}</p>
+    {%endfor%}
+</div>
+{% endblock %}

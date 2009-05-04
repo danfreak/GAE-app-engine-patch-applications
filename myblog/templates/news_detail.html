@@ -1,0 +1,36 @@
+{% extends 'nicecss_base.html' %}
+{% block title %}Person listing{% endblock %}
+
+{% block content %}
+
+<div class="blog">
+	<h2>News</h2>
+    {% for news in object_list %}
+    <div class="blog_post">
+    	<img src="img/blog1.jpg" alt="" title="" />
+        <p class="blog_title"><a href="blog.htm">{{news.title}}</a></p>
+        <p class="blog_date">{{ news.created|date:"d M Y" }}</p>
+        <p class="blog_text">
+        	{{news.content}}
+        </p>
+        <p class="action_links"><a href="{% url myblog.views.view_news %}">leggi tutto</a></p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if has_previous %}
+            <a href="{% url myblog.views.list_news %}?page={{ previous }}">&lt;-previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ paginator.number }} of {{ paginator.num_pages }}
+        </span>
+
+        {% if has_next %}
+            <a href="{% url myblog.views.list_news %}?page={{ next }}">next-&gt;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
