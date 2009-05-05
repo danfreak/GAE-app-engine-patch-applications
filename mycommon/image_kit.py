@@ -40,7 +40,7 @@ def resize_to_max(file, max_w, max_h):
   elif (ratio_new < 1 and height > max_h):
     new_w = int(round(max_w * ratio))
     new_h = max_h
-  else (ratio_new == 1 and width > max_w):
+  elif (ratio_new == 1 and width > max_w):
     new_w = max_w
     new_h = max_h
   
