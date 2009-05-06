@@ -1,0 +1,21 @@
+{% load common_templatetags %}
+{% get_latest photogallery.Gallery 9 as galleries %}
+<div class="right_top">
+	<div id="slider">
+        <div class="scroll">
+            <div class="scrollContainer">
+                
+                <div class="panel">
+                    <ul>
+                        {% for gall in galleries %}
+                    	<li>
+                        	<a href="#" class="tooltip" title="{{gall.title}}"><img src="{% url photogallery.views.getpic2 key=gall.key model=gall.title %}"/></a></a>
+                        	<span>{{gall.title}}</span>
+                        </li>
+                    	{%endfor%}                            
+                    </ul>
+                </div>                     
+            </div>  
+        </div>
+    </div>
+</div>

@@ -46,7 +46,29 @@ def resize_to_max(file, max_w, max_h):
   
   file = images.resize(file, new_w, new_h)
   return file
+
+def resize_to(file, w, h):
+  """ 
+  rezizes an image to given dimensions
+  """
+  width, height = getImageInfo(file)
   
+  if width < height:
+    file  =  images.resize(file,height=h)
+    width,height =  getImageInfo(file)
+    cropoff =  ((width  -  w)*.5)/width
+    file =  images.crop(file,top_y=0.0, bottom_y=1.0  - cropoff,left_x=cropoff,right_x=1.0  - cropoff)
+  else:
+    file  =  images.resize(file,width=w)
+    width,height =  getImageInfo(file)
+    cropoff =  ((height  -  h)*.5)/height
+    file =  images.crop(file,top_y=cropoff, bottom_y=1.0  - cropoff,left_x=0.0,right_x=1.0)
+  """
+  file = images.resize(file, width= w, height = h)
+  """
+  return file
+  
+
 def getImageInfo(file):
   """ 
   returns image dimensions

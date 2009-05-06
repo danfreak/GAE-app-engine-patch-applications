@@ -1,10 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'nicecss_base.html' %}
 {% block title %}Person details{% endblock %}
+{% block gallery_top %}
+{% load photogallery %}
+    {% show_results poll %}
 
+{% endblock %}
 {% block content %}
 <h1>Person details</h1>
 <a href="{% url photogallery.views.list_galleries %}">Back to listing</a>
-
+<a href="{% url photogallery.views.download_file key=object.key name=object.imgname %}"><img src="{% url photogallery.views.getpic2 key=object.key model=object.title %}"/></a>
 <ul>
   <li>name: {{ object.title }}</li>
 </ul>

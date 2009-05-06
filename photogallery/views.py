@@ -10,6 +10,7 @@ from photogallery.models import Gallery, Photo
 from ragendja.dbutils import get_object_or_404
 from ragendja.template import render_to_response
 
+
 def list_galleries(request):
     return object_list(request, Gallery.all(), paginate_by=10)
 
@@ -17,13 +18,20 @@ def show_gallery(request, key):
     return object_detail(request, Gallery.all(), key)
 
 def download_file(request, key, name):
-    file = get_object_or_404(Photo, key)
-    if file.name != name:
+    file = get_object_or_404(Gallery, key)
+    if file.imgname != name:
         raise Http404('Could not find file with this name!')
-    return HttpResponse(file.thumb_s,
-        content_type=guess_type(file.name)[0] or 'application/octet-stream')
+    return HttpResponse(file.file,
+        content_type=guess_type(file.imgname)[0] or 'application/octet-stream')
 
 def getpic2(request, key, model):
+    #print model
+    file = get_object_or_404(Gallery, key)
+    
+    return HttpResponse(file.file,
+        content_type=guess_type(file.imgname)[0] or 'application/octet-stream')
+
+def thumbnailer(request, key, model):
     file = get_object_or_404(Photo, key)
     
     return HttpResponse(file.thumb_s,

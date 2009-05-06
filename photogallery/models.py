@@ -5,6 +5,8 @@ from ragendja.dbutils import cleanup_relations
 
 from django.template.defaultfilters import slugify
 
+from mycommon.image_kit import flickr_thumb, resize_to_max, resize_to
+
 class Gallery(db.Model):
     #Basic user profile with personal details
     title = db.StringProperty(required=True)
@@ -12,8 +14,8 @@ class Gallery(db.Model):
     published = db.BooleanProperty("Pubblicato")
     created = db.DateTimeProperty("Created", auto_now_add = True)
     updated = db.DateTimeProperty("Updated", auto_now = True)
-    image_name = db.StringProperty()
-    image = db.BlobProperty("Immagine", required=True)
+    imgname = db.StringProperty("Nome immagine")
+    file = db.BlobProperty("Immagine", required=True)
     
     class Meta:
        verbose_name_plural = "galleries"
@@ -28,9 +30,10 @@ class Gallery(db.Model):
         return ('photogallery.views.show_gallery', (), {'key': self.key()})
     
     def put(self):
-      thumb = db.Blob(flickr_thumb(self.image, 100))
+      thumb = db.Blob(resize_to(self.file, 222, 152))
       
-      self.image  = thumb
+      self.file  = thumb
+      #self.imgname = 'gallery.jpg'
       
       key = super(Gallery, self).put()
       # do something after save
@@ -43,7 +46,7 @@ signals.pre_delete.connect(cleanup_relations, sender=Gallery)
 
 class Photo(db.Model):
     gallery = db.ReferenceProperty(Gallery, required=False, collection_name='gallery_set')
-    name = db.StringProperty()
+    imgname = db.StringProperty()
     file = db.BlobProperty(required=True)
     thumb_m = db.BlobProperty()
     thumb_s = db.BlobProperty()
@@ -54,7 +57,7 @@ class Photo(db.Model):
        ordering = ('-created',)
        
     def put(self):
-      t_s = db.Blob(flickr_thumb(self.file, 100))
+      t_s = db.Blob(resize_to_max(self.file, 300, 200))
       t_m = db.Blob(flickr_thumb(self.file, 200))
       #print t_s
       self.thumb_s  = t_s
@@ -67,13 +70,13 @@ class Photo(db.Model):
     save = put
     
     def thumb(self):
-    	return """<a href="/admin/photogallery/photo/%s/"><img src="/gallery/get_img/%s/%s/" alt="tiny thumbnail image" /></a>"""%(self.key(), self.key(), 'Photo')
+    	return """<a href="/admin/photogallery/photo/%s/"><img src="/gallery/get_img/%s/%s/" alt="tiny thumbnail image" /></a>"""%(self.key(), self.key(), u'Photo')
     thumb.allow_tags = True
 
     @permalink
     def get_absolute_url(self):
         return ('photogallery.views.download_file', (), {'key': self.key(),
-                                                         'name': self.name})
-
+                                                         'name': self.imgname})
+   
     def __unicode__(self):
-        return u'%s' % self.name
+        return u'%s' % self.imgname

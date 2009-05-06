@@ -23,26 +23,42 @@ def view_news(request, slug):
     
 def view_page(request, slug):
     p = db.Query(Page).filter("slug =", slug).get()
-    gall = Gallery.all()
-    gall.filter("published = ", True)
-    gall.order('-created')
+    
     #print p.title
-    return render_to_response(request, 'page_detail.html', {'page': p, 'galleries': gall})
+    return render_to_response(request, 'page_detail.html', {'page': p})
     #return object_detail(request, Page.all(), slug)
+
+def get_last_galleries():
+  
+  gall = Gallery.all()
+  gall.filter("published = ", True)
+  gall.order('-created')
+  """
+  for g in gall:
+    if n%3:
+      n=+
+    newgall[]
+  """
+  return gall
     
 def download_file(request, key, name):
     file = get_object_or_404(File, key)
-    if file.name != name:
+    if file.imgname != name:
         raise Http404('Could not find file with this name!')
     return HttpResponse(file.file,
-        content_type=guess_type(file.name)[0] or 'application/octet-stream')
+        content_type=guess_type(file.imgname)[0] or 'application/octet-stream')
 
 def getpic2(request, key):
     file = get_object_or_404(File, key)
     
     return HttpResponse(file.thumb_s,
         content_type=guess_type(file.name)[0] or 'application/octet-stream')
-
+        
+def getpic2(request, key):
+    file = get_object_or_404(File, key)
+    
+    return HttpResponse(file.thumb_s,
+        content_type=guess_type(file.name)[0] or 'application/octet-stream')
 def create_admin_user(request):
     user = User.get_by_key_name('admin')
     if not user or user.username != 'admin' or not (user.is_active and

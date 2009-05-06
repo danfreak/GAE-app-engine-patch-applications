@@ -8,5 +8,5 @@ urlpatterns = patterns('myblog.views',
     (r'^news/(?P<key>.+)$', 'view_news'),
     (r'^get_img/(?P<key>.+)/$', 'getpic2'),
     (r'^download/(?P<key>.+)/(?P<name>.+)$', 'download_file'),
-    (r'^content/(?P<slug>.+)/$', 'view_page'),
+    (r'^(?P<slug>.+)/$', 'view_page'),
 )

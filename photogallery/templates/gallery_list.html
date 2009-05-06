@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'nicecss_base.html' %}
 {% block title %}gallery listing{% endblock %}
 
 {% block content %}
@@ -8,6 +8,7 @@
   {% for gallery in object_list %}
     <li>
       <a href="{% url photogallery.views.show_gallery key=gallery.key %}">{{ gallery.title }}</a>
+      <a href="{% url photogallery.views.download_file key=gallery.key name=gallery.imgname %}"><img src="/gallery/get_pic/{{ gallery.key }}/Gallery/"/></a>
     </li>
   {% endfor %}
 </ul>

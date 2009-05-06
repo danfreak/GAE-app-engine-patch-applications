@@ -3,13 +3,13 @@ from photogallery.models import Gallery, Photo
 
 class PhotoInline(admin.TabularInline):
     model = Photo
-    fields = ['name', 'file']
+    fields = ['imgname', 'file']
     
 class PhotoAdmin(admin.ModelAdmin):
     model = Photo
-    fields = ['gallery', 'name', 'file']
-    list_display = ('thumb','name')
-
+    fields = ['gallery', 'imgname', 'file']
+    list_display = ('thumb','imgname')
+    
 
 class GalleryAdmin(admin.ModelAdmin):
     inlines = (PhotoInline,)
@@ -17,9 +17,11 @@ class GalleryAdmin(admin.ModelAdmin):
     list_filter = ('published',)
     search_fields = ('title',)
     fieldsets = [
-        (None,               {'fields': ['title', 'published', 'image']}),
+        (None,               {'fields': ['title', 'published', 'imgname', 'file']}),
         #('Data di pubblicazione', {'fields': ['pubblicare'], 'classes': ['collapse']}),
     ]
+    class Media:
+        js = ("/media/js/getfilename.js",)
 
 
 admin.site.register(Gallery, GalleryAdmin)
