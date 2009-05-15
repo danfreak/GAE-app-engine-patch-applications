@@ -1,15 +1,30 @@
 {% extends 'nicecss_base.html' %}
-{% block title %}Person listing{% endblock %}
+{% block title %}{{page.title}} &raquo; {{ block.super }}{% endblock %}
 
 {% block content %}
 
 <div class="blog">
 	<h2>{{page.title}}</h2>
     <div class="blog_post">
-        {% autoescape off %}
-        	    {{page.content}}
-        {% endautoescape %}
-        
+        {{page.content|safe}}
     </div>
 </div>
 {% endblock %}
+
+
+    {% block right_content %}
+        {% ifnotequal page.slug "home" %}
+            {% ifnotequal count(images) 0 %}
+                {% for i in p_images %}
+                    <div>
+                        <a href="{% url myblog.views.download_file key=i.key name=i.name%}" class="rightgall" rel="group">
+                            <img rel="" src="{% url myblog.views.get_right_pic key=i.key name=i.name%}" alt="immagine - {{ page.title|escape|striptags }}"/>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endifnotequal %}
+        {% else %}
+            {% include "nicecss/blocks/right_col.html" %}
+        {% endifnotequal %}
+    {% endblock %}
+    

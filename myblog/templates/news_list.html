@@ -1,5 +1,5 @@
 {% extends 'nicecss_base.html' %}
-{% block title %}Person listing{% endblock %}
+{% block title %}News arte Padova &raquo; {{ block.super }}{% endblock %}
 
 {% block content %}
 
@@ -7,19 +7,18 @@
 	<h2>News</h2>
     {% for news in object_list %}
     <div class="blog_post">
-    	<img src="img/blog1.jpg" alt="" title="" />
-        <p class="blog_title"><a href="blog.htm">{{news.title}}</a></p>
+        <p class="blog_title"><a href="/news/{{news.slug}}">{{news.title}}</a></p>
         <p class="blog_date">{{ news.created|date:"d M Y" }}</p>
         
         	{% autoescape off %}
-        	    {{news.content}}
+        	    {{news.content|truncatewords_html:40}}
         	{% endautoescape %}
         
-        <p class="action_links"><a href="/news/{{news.key}}">leggi tutto</a></p>
+        <p class="action_links"><a href="/news/{{news.slug}}">leggi tutto</a></p>
     </div>
     {% endfor %}
 </div>
-
+{%ifnotequal paginator.num_pages 1 %}
 <div class="pagination">
     <span class="step-links">
         {% if has_previous %}
@@ -35,4 +34,5 @@
         {% endif %}
     </span>
 </div>
+{% endifnotequal %}
 {% endblock %}

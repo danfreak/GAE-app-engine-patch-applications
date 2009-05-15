@@ -57,7 +57,10 @@ class Photo(db.Model):
        ordering = ('-created',)
        
     def put(self):
-      t_s = db.Blob(resize_to_max(self.file, 300, 200))
+      #resize file to fit max dimensions
+      self.file  = resize_to_max(self.file, 600, 600)
+      #create thumbs
+      t_s = db.Blob(flickr_thumb(self.file, 100))
       t_m = db.Blob(flickr_thumb(self.file, 200))
       #print t_s
       self.thumb_s  = t_s
@@ -69,14 +72,15 @@ class Photo(db.Model):
     
     save = put
     
-    def thumb(self):
-    	return """<a href="/admin/photogallery/photo/%s/"><img src="/gallery/get_img/%s/%s/" alt="tiny thumbnail image" /></a>"""%(self.key(), self.key(), u'Photo')
-    thumb.allow_tags = True
+    def admin_thumb(self):
+    	return """<a href="/admin/photogallery/photo/%s/"><img src="/gallery/thumb_m/%s/%s" alt="tiny thumbnail image" /></a>"""%(self.key(), self.key(), self.imgname)
+    #admin_thumb.short_description = _('Thumbnail')
+    admin_thumb.allow_tags = True
 
     @permalink
     def get_absolute_url(self):
-        return ('photogallery.views.download_file', (), {'key': self.key(),
-                                                         'name': self.imgname})
+        return ('photogallery.views.view_img', (), {'key': self.key(),
+                                                    'name': self.imgname})
    
     def __unicode__(self):
         return u'%s' % self.imgname

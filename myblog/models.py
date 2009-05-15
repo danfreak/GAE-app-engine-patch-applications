@@ -5,7 +5,16 @@ from ragendja.dbutils import cleanup_relations
 from django.template.defaultfilters import slugify
 from google.appengine.ext.db import polymodel
 
-from mycommon.image_kit import flickr_thumb
+from mycommon.image_kit import flickr_thumb, resize_to, resize_to_max
+
+import re
+import unicodedata
+
+def sluggy(string):
+    string = unicodedata.normalize('NFKD', string).encode('ASCII', 'ignore')
+    string = re.sub('\s+', '-', string)
+    string = re.sub('[^\w.-]', '', string)
+    return string.strip('_.- ').lower()
 
 class Categoria(db.Model):
     name = db.StringProperty("Name", required = True)
@@ -39,6 +48,15 @@ class News(db.Model):
         
     def __unicode__(self):
         return '%s' % (self.title)
+        
+    def put(self):
+      self.slug = sluggy(self.title)
+      
+      key = super(News, self).put()
+      # do something after save
+      return key
+    
+    save = put
 
 
 class Page(db.Model):
@@ -63,16 +81,16 @@ class Page(db.Model):
         
     def __unicode__(self):
         return '%s' % (self.title)
-        
+    """
     def put(self):
-      #self.slug = slugify(self.title)
+      self.slug = sluggy(self.title)
       
       key = super(Page, self).put()
       # do something after save
       return key
     
     save = put
-    
+    """
 
 
 class File(db.Model):
@@ -84,16 +102,22 @@ class File(db.Model):
     file = db.BlobProperty(required=True)
     thumb_m = db.BlobProperty()
     thumb_s = db.BlobProperty()
+    thumb_w = db.BlobProperty()
     
     class Meta:
       ordering = ('-created')
     
     def put(self):
+      #resize file to fit max dimensions
+      self.file  = resize_to_max(self.file, 600, 600)
+      #create thumbs
       t_s = db.Blob(flickr_thumb(self.file, 100))
       t_m = db.Blob(flickr_thumb(self.file, 200))
+      t_w = db.Blob(resize_to(self.file, 321, 110))
       #print t_s
       self.thumb_s  = t_s
       self.thumb_m  = t_m
+      self.thumb_w  = t_w
       
       key = super(File, self).put()
       # do something after save
@@ -102,7 +126,7 @@ class File(db.Model):
     save = put
     
     def thumb(self):
-    	return """<a href="/admin/myblog/file/%s/"><img src="/get_img/%s/" alt="tiny thumbnail image" /></a>"""%(self.key(), self.key())
+    	return """<a href="/admin/myblog/file/%s/"><img src="/thumb/%s/%s" alt="tiny thumbnail image" /></a>"""%(self.key(), self.key(), self.name)
     thumb.allow_tags = True
     
     @permalink

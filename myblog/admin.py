@@ -8,6 +8,7 @@ class FileInline(admin.TabularInline):
     fields = ['file']
     #used to set filename automagically
     form = FileForm
+    extra = 5
     
 class FileAdmin(admin.ModelAdmin):
     model = File
@@ -29,7 +30,7 @@ class CategoriaAdmin(admin.ModelAdmin):
     
 class PageAdmin(admin.ModelAdmin):
     inlines = (FileInline,)
-    list_display = ('subpage_of', 'title', 'published', 'created')
+    list_display = ('title', 'subpage_of', 'published', 'created')
     search_fields = ('title',)
     list_filter = ('published',)
     fields = ['subpage_of', 'title', 'slug', 'content', 'published']

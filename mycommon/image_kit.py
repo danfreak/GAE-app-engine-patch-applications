@@ -18,7 +18,7 @@ def flickr_thumb(file,size):
     cropoff =  ((width  -  size)*.5)/width
     file  = images.crop(file,left_x=cropoff, right_x=1.0 - cropoff,top_y=0.0,bottom_y=1.0)
     
-  file = images.im_feeling_lucky(file)
+  file = images.im_feeling_lucky(file, images.JPEG)
   return file
 
 def resize_to_max(file, max_w, max_h):
@@ -48,6 +48,7 @@ def resize_to_max(file, max_w, max_h):
     new_h = max_h
   
   file = images.resize(file, new_w, new_h)
+  file = images.im_feeling_lucky(file, images.JPEG)
   return file
 
 
@@ -79,7 +80,7 @@ def resize_to(file, w, h):
   else:
     file = images.resize(file, width = w, height= h)
     
-  #file = images.im_feeling_lucky(file)
+  file = images.im_feeling_lucky(file, images.JPEG)
   return file
   
 def getImageInfo(file):
